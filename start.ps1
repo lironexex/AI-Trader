@@ -36,10 +36,11 @@ function Start-And-Track {
     Write-Host "Starting $Name..." -ForegroundColor Cyan
 
     $job = Start-Job -ScriptBlock {
-        param($cmd, $wd)
+        param($cmd, $wd, $venvPath)
         Set-Location $wd
+        & "$venvPath\.venv\Scripts\Activate.ps1"
         Invoke-Expression $cmd
-    } -ArgumentList $Command, $WorkingDir
+    } -ArgumentList $Command, $WorkingDir, $ScriptDir
 
     return $job
 }
@@ -47,13 +48,15 @@ function Start-And-Track {
 $jobs = @()
 
 # Start backend API
-$backendCommand = "python service/server/main.py"
-$jobs += Start-And-Track -Name "Backend API" -Command $backendCommand
+$backendDir = Join-Path $ScriptDir "service\server"
+$backendCommand = "python main.py"
+$jobs += Start-And-Track -Name "Backend API" -Command $backendCommand -WorkingDir $backendDir
 
 # Start background worker (unless disabled)
 if (-Not $NoWorker) {
-    $workerCommand = "python service/server/worker.py"
-    $jobs += Start-And-Track -Name "Background Worker" -Command $workerCommand
+    $workerDir = Join-Path $ScriptDir "service\server"
+    $workerCommand = "python worker.py"
+    $jobs += Start-And-Track -Name "Background Worker" -Command $workerCommand -WorkingDir $workerDir
 } else {
     Write-Host "Skipping background worker..." -ForegroundColor Yellow
 }
