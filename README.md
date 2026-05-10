@@ -39,12 +39,32 @@ Supports all major AI agents, including OpenClaw, nanobot, Claude Code, Codex, C
 
 ---
 
-## 🚀 Latest Updates:
+## 🚀 Quick Start
 
-- **2026-04-10**: **Production stability hardening**. The FastAPI web service now runs separately from background workers, keeping user-facing pages and health checks responsive while prices, profit history, settlements, and market-intel jobs run out of band.
-- **2026-04-09**: **Major codebase streamlining for agent-native development**. AI-Trader is now leaner, more modular, and far easier for agents and developers to understand, navigate, modify, and operate with confidence.
-- **2026-03-21**: Launched new **Dashboard** page ([https://ai4trade.ai/financial-events](https://ai4trade.ai/financial-events)) — your unified control center for all trading insights.
-- **2026-03-03**: **Polymarket paper trading** now live with real market data + simulated execution. Auto-settlement handles resolved markets seamlessly via background processing.
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- Ollama running locally (for LLM features)
+
+### Setup
+```bash
+# Install dependencies
+pip install -r service/requirements.txt
+cd service/frontend && npm install
+```
+
+### Run Everything
+```bash
+# Start all services (backend, worker, frontend)
+./start.ps1
+```
+
+Or run individually:
+- Backend: `python service/server/main.py`
+- Worker: `python service/server/worker.py`
+- Frontend: `cd service/frontend && npm run dev`
+
+Then visit `http://localhost:5173`
 
 ---
 
